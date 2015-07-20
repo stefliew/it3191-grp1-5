@@ -120,17 +120,20 @@ public class LoginForm {
 					String id = getJTextFieldUserId ().getText();
 					String pwd = new String(getJPasswordField().getPassword());
 
-					User userObj = new User(id,pwd);
-					dbOk = userObj.retrieveUser();
-					if (dbOk) {
-//						JOptionPane.showMessageDialog(getJFrame(), "Success");
-						getJFrame().dispose();
-						EncryptForm encryptWindow = new EncryptForm();
-						encryptWindow.getJFrame().setVisible(true);
-					}
-					else
-					{
-						JOptionPane.showMessageDialog(getJFrame(), "Invalid username and/or password.");
+					if (validateInput()){
+
+						User userObj = new User(id,pwd);
+						dbOk = userObj.retrieveUser();
+						if (dbOk) {
+							//						JOptionPane.showMessageDialog(getJFrame(), "Success");
+							getJFrame().dispose();
+							EncryptForm encryptWindow = new EncryptForm();
+							encryptWindow.getJFrame().setVisible(true);
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(getJFrame(), "Invalid username and/or password.");
+						}
 					}
 				}
 			});
@@ -139,6 +142,16 @@ public class LoginForm {
 	}
 	
 	private boolean validateInput() {
+		String id;
+		char[] pass;
+		id = getJTextFieldUserId().getText();
+		pass = getJPasswordField().getPassword();
+
+		if(id == null || pass == null) {
+			JOptionPane.showMessageDialog(getJFrame(), "All fields must be filled in.");
+
+			return false;
+		}
 		return true;
 	}
 

@@ -121,20 +121,60 @@ public class RegisterForm {
 					String id = getJTextFieldUserId ().getText();
 					String pwd = new String(getJPasswordField().getPassword());
 
-					User userObj = new User(id,pwd);
-					try {
-						dbOk = userObj.createUser();
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					if (validateInput()) {
+
+						User userObj = new User(id,pwd);
+						try {
+							dbOk = userObj.createUser();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
+						if (dbOk) {
+							JOptionPane.showMessageDialog(getJFrame(), "Success! You may now log in with your new user id.");
+							getJFrame().dispose();
+							LoginForm loginWindow = new LoginForm();
+							loginWindow.getJFrame().setVisible(true);
+						}
+						else {
+							JOptionPane.showMessageDialog(getJFrame(), "Error - User id already exists.");
+						}
 					}
 				}
 			});
 		}
 		return jButtonSubmit;
 	}
-	
+
 	private boolean validateInput() {
+		String id;
+		char[] pass, cfmpass;
+		id = getJTextFieldUserId().getText();
+		pass = getJPasswordField().getPassword();
+		cfmpass = getJPasswordCfmField().getPassword();
+
+		if(id.length() ==0 || pass.length == 0 || cfmpass.length == 0) {
+			JOptionPane.showMessageDialog(getJFrame(), "All fields must be filled in.");
+
+			return false;
+		}
+		else {
+			if (pass.length == cfmpass.length) {
+
+				boolean check = false;
+				for (int i = 0; i < pass.length; i++) {
+					if (pass[i] != cfmpass[i]) {
+						JOptionPane.showMessageDialog(getJFrame(), "Both password fields must match.");
+						return false;
+					}
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(getJFrame(), "Both password fields must match.");
+				return false;
+			}
+		}
 		return true;
 	}
 
